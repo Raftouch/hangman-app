@@ -8,7 +8,7 @@ interface HangmanWordProps {
 
 export function HangmanWord({guessedLetters, wordToGuess, reveal = false}: HangmanWordProps) {
   return (
-    <div className='flex gap-5 font-bold uppercase text-6xl'>
+    <div className='flex gap-5 font-bold uppercase text-4xl flex-wrap'>
       {wordToGuess.split('').map((letter, index) => (
         <span className='border-b-8 border-black' key={index}>
             <span 

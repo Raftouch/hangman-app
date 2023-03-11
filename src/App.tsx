@@ -55,10 +55,10 @@ function App() {
   }, [])
 
   return (
-    <div className='max-w-[800px] flex flex-col gap-10 m-auto items-center'>
-      <div className='text-center'>
-        {isWinner && 'Gagné ! - Actualisez la page pour essayer encore une fois'}
-        {isLoser && 'Bien essayé - Actualisez la page pour essayer encore une fois'}
+    <div className='max-w-[800px] flex flex-col gap-10 m-auto items-center p-5'>
+      <div className='text-center text-2xl'>
+        {isWinner && <p>Gagné ! &#128525;<span className="text-lg"> - Actualisez la page pour essayer encore une fois</span></p>}
+        {isLoser && <p>Bien essayé &#128515;<span className="text-lg"> - Actualisez la page pour essayer encore une fois</span></p>}
       </div>
       <HangmanDrawing 
         numberOfGuesses={incorrectLetters.length} />
