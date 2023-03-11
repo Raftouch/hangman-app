@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { HangmanDrawing } from "./components/HangmanDrawing"
 import { HangmanWord } from "./components/HangmanWord"
 import { Keyboard } from "./components/Keyboard"
@@ -11,11 +11,15 @@ function App() {
   const [guessedLetters, setGuessedLetters] = useState<string[]>([])
   const incorrectLetters = guessedLetters.filter(letter => !wordToGuess.includes(letter))
 
-  function addGuessedLetter(letter: string) {
-    if (guessedLetters.includes(letter)) return
+  const isLoser = incorrectLetters.length >= 6
+  const isWinner = wordToGuess.split('').every(letter => guessedLetters.includes(letter))
 
-    setGuessedLetters(currentLetters => [...currentLetters, letter])
-  }
+  const addGuessedLetter = useCallback((letter: string) => {
+    if (guessedLetters.includes(letter) || isWinner || isLoser) return 
+  
+     setGuessedLetters(currentLetters => [...currentLetters, letter])
+
+  }, [guessedLetters, isWinner, isLoser])
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -33,12 +37,19 @@ function App() {
   }, [guessedLetters])
 
   return (
-    <div className='max-w-[800px] flex flex-col gap-2 m-auto items-center'>
-      <div className='text-center'>Lose Win</div>
+    <div className='max-w-[800px] flex flex-col gap-10 m-auto items-center'>
+      <div className='text-center'>
+        {isWinner && 'Gagné ! - Actualisez la page pour essayer encore une fois'}
+        {isLoser && 'Bien essayé - Actualisez la page pour essayer encore une fois'}
+      </div>
       <HangmanDrawing numberOfGuesses={incorrectLetters.length} />
       <HangmanWord guessedLetters={guessedLetters} wordToGuess={wordToGuess} />
       <div className="self-stretch">
-        <Keyboard />
+        <Keyboard 
+          disabled={isWinner || isLoser}
+          activeLetters={guessedLetters.filter(letter => wordToGuess.includes(letter))}
+          inactiveLetters={incorrectLetters} 
+          addGuessedLetter={addGuessedLetter} />
       </div>
     </div>
   )

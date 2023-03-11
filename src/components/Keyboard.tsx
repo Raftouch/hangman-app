@@ -1,4 +1,5 @@
 import React from 'react'
+import styles from './Keyboard.module.css'
 
 const keys = [
     "a",
@@ -29,7 +30,14 @@ const keys = [
     "z"
 ]
 
-export function Keyboard() {
+interface KeyboardProps {
+    activeLetters: string[]
+    inactiveLetters: string[]
+    disabled?: boolean
+    addGuessedLetter: (letter: string) => void
+}
+
+export function Keyboard({activeLetters, inactiveLetters, disabled = false, addGuessedLetter}: KeyboardProps) {
   return (
     <div
         style={{
@@ -39,8 +47,16 @@ export function Keyboard() {
         }}
     >
       {keys.map(key => {
+        const isActive = activeLetters.includes(key)
+        const isInactive = inactiveLetters.includes(key)
+
         return (
-            <button className='border-4 border-black aspect-square text-4xl uppercase font-bold cursor-pointer hover:bg-cyan-400 active:bg-cyan-600 active:text-white disabled:opacity-25' key={key}>{key}</button>
+            <button 
+                className={`${styles.btn} ${isActive ? styles.active : ''} ${isInactive ? styles.inactive : ''}`}
+                key={key}
+                onClick={() => addGuessedLetter(key)}
+                disabled={isInactive || isActive || disabled}
+            >{key}</button>
         )
       })}
     </div>
